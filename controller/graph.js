@@ -3,22 +3,18 @@ const prisma = new PrismaClient();
 
 
 const searchWithTag = async (req, res) => {
-    // node.searchTags is an array of strings, where each string can be something like a numeric id or a name. 
-    // Return all nodes that have a partial match with the search tag.
     try {
-        const nodes = await prisma.node.findMany({
-            where: {
-                searchTags: {
-                    some: {
-                        contains: req.body.searchTag,
-                    },
-                },
-            },
-        });
-        res.json({ nodes });
-    }
-    catch (error) {
-        res.status(500).json({ error: error });
+        const nodes = await prisma.node.findMany(); // Fetch all nodes
+        const searchTag = req.body.searchTag.toLowerCase();
+
+        // Filter nodes where any tag in searchTags partially matches the searchTag
+        const filteredNodes = nodes.filter(node =>
+            node.searchTags.some(tag => tag.toLowerCase().includes(searchTag))
+        );
+
+        res.json({ nodes: filteredNodes });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
         console.error(error);
     }
 };

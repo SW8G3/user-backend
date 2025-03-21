@@ -30,10 +30,10 @@ model User {
 }
 
 model Node {
-  id         Int     @id @default(autoincrement())
+  id         Int      @id @default(autoincrement())
   isWaypoint Boolean
   position   Float[]
-  searchTags    String[]
+  searchTags String[] @default([]) // A list of search tags, such as a room number, room name
   //hasElevator   Boolean
   //hasStairs     Boolean
   //hasDoor       Boolean
