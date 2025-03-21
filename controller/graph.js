@@ -95,10 +95,11 @@ function heuristic(nodeA, nodeB) {
 }
 
 const getRoute = async (req, res) => {
+    console.log("Hi from getRoute in graph.js")
     try {
         const from = await prisma.node.findFirst({
             where: {
-                id: req.body.from,
+                id: req.body.src,
             },
         });
         if (!from) {
@@ -107,7 +108,7 @@ const getRoute = async (req, res) => {
         }
         const to = await prisma.node.findFirst({
             where: {
-                id: req.body.to,
+                id: req.body.dst,
             },
         });
         if (!to) {
@@ -127,8 +128,8 @@ const getRoute = async (req, res) => {
 
 const getDirectionPhoto = async (req, res) => {
     try {
-        const from = req.body.from;
-        const to = req.body.to;
+        const from = req.body.src;
+        const to = req.body.dst;
         
         const edge = await prisma.edge.findFirst({
             where: {

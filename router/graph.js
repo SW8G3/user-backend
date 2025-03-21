@@ -3,7 +3,7 @@ const router = express.Router();
 
 const graph = require('../controller/graph');
 
-router.get('/route', graph.getRoute);
+router.post('/route', graph.getRoute);
 
 router.get('/direction', graph.getDirectionPhoto);
 
