@@ -5,7 +5,6 @@ const port = 3002;
 
 
 const graphRouter = require('./router/graph');
-const loginRouter = require('./router/login');
 
 
 app.use(cors());
@@ -14,10 +13,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 
-//app.use('/node', nodeRouter);
-//app.use('/edge', edgeRouter);
 app.use('/graph', graphRouter);
-app.use('/login', loginRouter);
 
 
 app.listen(port, () => {

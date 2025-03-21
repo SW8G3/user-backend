@@ -7,4 +7,6 @@ router.get('/route', graph.getRoute);
 
 router.get('/direction', graph.getDirectionPhoto);
 
+router.get('/searchWithTag', graph.searchWithTag);
+
 module.exports = router;
