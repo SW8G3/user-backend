@@ -125,8 +125,8 @@ const getRoute = async (req, res) => {
 
 const getDirectionPhoto = async (req, res) => {
     try {
-        const from = req.body.src;
-        const to = req.body.dst;
+        const from = req.body.src; // id of from node
+        const to = req.body.dst; // id of to node
 
         const edge = await prisma.edge.findFirst({
             where: {

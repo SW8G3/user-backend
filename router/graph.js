@@ -5,7 +5,7 @@ const graph = require('../controller/graph');
 
 router.post('/route', graph.getRoute);
 
-router.get('/direction', graph.getDirectionPhoto);
+router.post('/direction', graph.getDirectionPhoto);
 
 router.post('/search', graph.searchWithTag);
 
