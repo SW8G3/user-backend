@@ -95,7 +95,6 @@ function heuristic(nodeA, nodeB) {
 }
 
 const getRoute = async (req, res) => {
-    console.log("Hi from getRoute in graph.js")
     try {
         const from = await prisma.node.findFirst({
             where: {
@@ -115,10 +114,8 @@ const getRoute = async (req, res) => {
             res.status(404).json({ error: "Node not found" });
             return;
         }
-
         const edges = await prisma.edge.findMany();
         const route = aStarRoute(from, to, edges, heuristic);
-
         res.json({ route });
     } catch (error) {
         res.status(500).json({ error: error });
