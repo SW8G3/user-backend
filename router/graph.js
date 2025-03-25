@@ -7,6 +7,6 @@ router.post('/route', graph.getRoute);
 
 router.get('/direction', graph.getDirectionPhoto);
 
-router.get('/search', graph.searchWithTag);
+router.post('/search', graph.searchWithTag);
 
 module.exports = router;

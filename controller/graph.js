@@ -127,7 +127,7 @@ const getDirectionPhoto = async (req, res) => {
     try {
         const from = req.body.src;
         const to = req.body.dst;
-        
+
         const edge = await prisma.edge.findFirst({
             where: {
                 OR: [
