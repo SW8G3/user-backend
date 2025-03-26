@@ -114,7 +114,15 @@ const getRoute = async (req, res) => {
             res.status(404).json({ error: "Node not found" });
             return;
         }
-        const edges = await prisma.edge.findMany();
+
+        // Get every edge where isObstructed is false
+        const edges = await prisma.edge.findMany({
+            where: {
+                isObstructed: false,
+                clearance: 0,
+            },
+        });
+
         const route = aStarRoute(from, to, edges, heuristic);
         res.json({ route });
     } catch (error) {
