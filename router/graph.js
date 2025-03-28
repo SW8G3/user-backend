@@ -3,10 +3,10 @@ const router = express.Router();
 
 const graph = require('../controller/graph');
 
-router.get('/route', graph.getRoute);
+router.post('/route', graph.getRoute);
 
-router.get('/direction', graph.getDirectionPhoto);
+router.post('/direction', graph.getDirectionPhoto);
 
-router.get('/search', graph.searchWithTag);
+router.post('/search', graph.searchWithTag);
 
 module.exports = router;
