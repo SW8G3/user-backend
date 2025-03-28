@@ -139,8 +139,8 @@ const getDirectionPhoto = async (req, res) => {
         const edge = await prisma.edge.findFirst({
             where: {
                 OR: [
-                    { NodeA: from, nodeB: to },
-                    { fromA: to, fromB: from },
+                    { nodeA: from, nodeB: to },
+                    { nodeB: to, nodeA: from },
                 ],
             },
         });
