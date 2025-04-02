@@ -114,7 +114,15 @@ const getRoute = async (req, res) => {
             res.status(404).json({ error: "Node not found" });
             return;
         }
-        const edges = await prisma.edge.findMany();
+
+        // Get every edge where isObstructed is false
+        const edges = await prisma.edge.findMany({
+            where: {
+                isObstructed: false,
+                //clearance: 0,
+            },
+        });
+
         const route = aStarRoute(from, to, edges, heuristic);
         res.json({ route });
     } catch (error) {
@@ -125,14 +133,14 @@ const getRoute = async (req, res) => {
 
 const getDirectionPhoto = async (req, res) => {
     try {
-        const from = req.body.src; // id of from node
-        const to = req.body.dst; // id of to node
+        const src = req.body.src; // id of from node
+        const dst = req.body.dst; // id of to node
 
         const edge = await prisma.edge.findFirst({
             where: {
                 OR: [
-                    { NodeA: from, nodeB: to },
-                    { fromA: to, fromB: from },
+                    { nodeA: src, nodeB: dst },
+                    { nodeB: dst, nodeA: src },
                 ],
             },
         });
@@ -142,7 +150,7 @@ const getDirectionPhoto = async (req, res) => {
         }
 
         // Get fromAImgUrl from edge if node.id is fromA or get fromBImgUrl if node.id is fromB
-        const imgUrl = edge.fromA === from.id ? edge.fromAImgUrl : edge.fromBImgUrl;
+        const imgUrl = edge.nodeA === src.id ? edge.fromAImgUrl : edge.fromBImgUrl;
         res.json({ imgUrl });
     } catch (error) {
         res.status(500).json({ error: error });
