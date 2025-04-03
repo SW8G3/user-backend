@@ -140,7 +140,7 @@ const getDirectionPhoto = async (req, res) => {
             where: {
                 OR: [
                     { nodeA: src, nodeB: dst },
-                    { nodeB: dst, nodeA: src },
+                    { nodeA: dst, nodeB: src },
                 ],
             },
         });
@@ -150,7 +150,9 @@ const getDirectionPhoto = async (req, res) => {
         }
 
         // Get fromAImgUrl from edge if node.id is fromA or get fromBImgUrl if node.id is fromB
-        const imgUrl = edge.nodeA === src.id ? edge.fromAImgUrl : edge.fromBImgUrl;
+        const fromAImgUrl = edge.fromAImgUrl;
+        const fromBImgUrl = edge.fromBImgUrl;
+        const imgUrl = edge.nodeA === src ? fromAImgUrl : fromBImgUrl;
         res.json({ imgUrl });
     } catch (error) {
         res.status(500).json({ error: error });
