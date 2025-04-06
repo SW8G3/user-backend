@@ -28,7 +28,7 @@ const searchWithTag = async (req, res) => {
  * @param {Function} heuristic - The heuristic function to estimate cost.
  * @returns {Array<Object>} - The shortest path as a list of nodes.
  */
-function aStarRoute(start, goal, edges, heuristic) {
+export function aStarRoute(start, goal, edges, heuristic) {
     const openSet = new Set([start.id]);
     const cameFrom = new Map();
 
