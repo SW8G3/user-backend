@@ -98,7 +98,7 @@ const getRoute = async (req, res) => {
     try {
         const from = await prisma.node.findFirst({
             where: {
-                id: req.body.from,
+                id: req.body.src,
             },
         });
         if (!from) {
@@ -107,7 +107,7 @@ const getRoute = async (req, res) => {
         }
         const to = await prisma.node.findFirst({
             where: {
-                id: req.body.to,
+                id: req.body.dst,
             },
         });
         if (!to) {
@@ -115,9 +115,15 @@ const getRoute = async (req, res) => {
             return;
         }
 
-        const edges = await prisma.edge.findMany();
-        const route = aStarRoute(from, to, edges, heuristic);
+        // Get every edge where isObstructed is false
+        const edges = await prisma.edge.findMany({
+            where: {
+                isObstructed: false,
+                //clearance: 0,
+            },
+        });
 
+        const route = aStarRoute(from, to, edges, heuristic);
         res.json({ route });
     } catch (error) {
         res.status(500).json({ error: error });
@@ -127,14 +133,14 @@ const getRoute = async (req, res) => {
 
 const getDirectionPhoto = async (req, res) => {
     try {
-        const from = req.body.from;
-        const to = req.body.to;
-        
+        const src = req.body.src; // id of from node
+        const dst = req.body.dst; // id of to node
+
         const edge = await prisma.edge.findFirst({
             where: {
                 OR: [
-                    { NodeA: from, nodeB: to },
-                    { fromA: to, fromB: from },
+                    { nodeA: src, nodeB: dst },
+                    { nodeA: dst, nodeB: src },
                 ],
             },
         });
@@ -144,7 +150,9 @@ const getDirectionPhoto = async (req, res) => {
         }
 
         // Get fromAImgUrl from edge if node.id is fromA or get fromBImgUrl if node.id is fromB
-        const imgUrl = edge.fromA === from.id ? edge.fromAImgUrl : edge.fromBImgUrl;
+        const fromAImgUrl = edge.fromAImgUrl;
+        const fromBImgUrl = edge.fromBImgUrl;
+        const imgUrl = edge.nodeA === src ? fromAImgUrl : fromBImgUrl;
         res.json({ imgUrl });
     } catch (error) {
         res.status(500).json({ error: error });
