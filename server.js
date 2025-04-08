@@ -16,6 +16,6 @@ app.use(express.urlencoded({ extended: true }));
 app.use('/graph', graphRouter);
 
 
-app.listen(port, () => {
-    console.log(`Server is running on http://localhost:${port}`);
-});
+app.listen(port, '0.0.0.0', () => {
+    console.log(`Server is running on http://10.92.0.113:${port}`);
+  });
