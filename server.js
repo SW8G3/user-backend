@@ -11,8 +11,8 @@ const graphRouter = require('./router/graph');
 
 
 // SSL certificate and key from mkcert
-const key = fs.readFileSync(path.join(__dirname, 'localhost+2-key.pem'));
-const cert = fs.readFileSync(path.join(__dirname, 'localhost+2.pem'));
+const key = fs.readFileSync(path.join(__dirname, '10.92.0.113+3-key.pem'));
+const cert = fs.readFileSync(path.join(__dirname, '10.92.0.113+3.pem'));
 
 
 const corsOptions = {
