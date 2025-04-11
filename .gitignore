@@ -26,7 +26,3 @@ dist-ssr
 P2---Website/*
 .env
 /prisma/migrations
-
-# For HTTPS
-localhost+2*.pem
-*.pem
