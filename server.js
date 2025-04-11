@@ -14,12 +14,21 @@ const graphRouter = require('./router/graph');
 const key = fs.readFileSync(path.join(__dirname, '10.92.0.113+3-key.pem'));
 const cert = fs.readFileSync(path.join(__dirname, '10.92.0.113+3.pem'));
 
-
+/*
 const corsOptions = {
   origin: 'https://10.92.0.113:5173', // Ensure this matches your frontend's HTTPS URL
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true, // Allow cookies and credentials if needed
+  preflightContinue: false,
+  optionsSuccessStatus: 204,
+};
+*/
+
+const corsOptions = {
+  origin: '*', // Allow all origins (for debugging only)
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
   preflightContinue: false,
   optionsSuccessStatus: 204,
 };
