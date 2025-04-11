@@ -8,7 +8,7 @@ const graphRouter = require('./router/graph');
 
 
 const corsOptions = {
-  origin: 'https://10.92.0.113:5173', // Ensure this matches your frontend's HTTPS URL
+  origin: 'http://10.92.0.113:5173', // Ensure this matches your frontend's HTTPS URL
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true, // Allow cookies and credentials if needed
