@@ -16,12 +16,13 @@ const cert = fs.readFileSync(path.join(__dirname, '10.92.0.113+3.pem'));
 
 
 const corsOptions = {
-    origin: 'https://10.92.0.113:5173',  // Allow requests from the frontend (which is running on this IP and port)
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
-    preflightContinue: false,
-    optionsSuccessStatus: 204,
-  };
+  origin: 'https://10.92.0.113:5173', // Ensure this matches your frontend's HTTPS URL
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true, // Allow cookies and credentials if needed
+  preflightContinue: false,
+  optionsSuccessStatus: 204,
+};
 
 // Middleware
 app.use(cors(corsOptions));
