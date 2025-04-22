@@ -28,5 +28,4 @@ P2---Website/*
 /prisma/migrations
 
 # For HTTPS
-localhost+2*.pem
-*.pem
+/ssl
