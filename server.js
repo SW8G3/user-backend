@@ -23,7 +23,7 @@ const corsOptions = {
   preflightContinue: false,
   optionsSuccessStatus: 204,
 };
-*/
+
 
 const corsOptions = {
   origin: '*', // Allow all origins (for debugging only)
@@ -31,6 +31,15 @@ const corsOptions = {
   allowedHeaders: ['Content-Type', 'Authorization'],
   preflightContinue: false,
   optionsSuccessStatus: 204,
+};
+
+*/
+
+const corsOptions = {
+  origin: 'https://10.92.0.113',  // your frontend's full HTTPS origin (no trailing slash)
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true,  // only if you're using cookies or sessions
 };
 
 // Middleware
