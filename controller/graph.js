@@ -19,6 +19,26 @@ const searchWithTag = async (req, res) => {
     }
 };
 
+const getNodeFromId = async (req, res) => {
+    try {
+        const nodeId = req.body.nodeId; // Assuming the ID is passed in the request body
+        const node = await prisma.node.findUnique({
+            where: {
+                id: nodeId,
+            },
+        });
+
+        if (!node) {
+            res.status(404).json({ error: "Node not found" });
+            return;
+        }
+
+        res.json({ node });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+        console.error(error);
+    }
+};
 
 /**
  * A* algorithm to find the shortest path between two nodes.
@@ -119,7 +139,7 @@ const getRoute = async (req, res) => {
         const edges = await prisma.edge.findMany({
             where: {
                 isObstructed: false,
-                clearance: 0,
+                //clearance: 0,
             },
         });
 
@@ -133,14 +153,14 @@ const getRoute = async (req, res) => {
 
 const getDirectionPhoto = async (req, res) => {
     try {
-        const from = req.body.src; // id of from node
-        const to = req.body.dst; // id of to node
+        const src = req.body.src; // id of from node
+        const dst = req.body.dst; // id of to node
 
         const edge = await prisma.edge.findFirst({
             where: {
                 OR: [
-                    { NodeA: from, nodeB: to },
-                    { fromA: to, fromB: from },
+                    { nodeA: src, nodeB: dst },
+                    { nodeA: dst, nodeB: src },
                 ],
             },
         });
@@ -150,7 +170,9 @@ const getDirectionPhoto = async (req, res) => {
         }
 
         // Get fromAImgUrl from edge if node.id is fromA or get fromBImgUrl if node.id is fromB
-        const imgUrl = edge.fromA === from.id ? edge.fromAImgUrl : edge.fromBImgUrl;
+        const fromAImgUrl = edge.fromAImgUrl;
+        const fromBImgUrl = edge.fromBImgUrl;
+        const imgUrl = edge.nodeA === src ? fromAImgUrl : fromBImgUrl;
         res.json({ imgUrl });
     } catch (error) {
         res.status(500).json({ error: error });
@@ -160,6 +182,7 @@ const getDirectionPhoto = async (req, res) => {
 
 module.exports = {
     getRoute,
+    getNodeFromId,
     getDirectionPhoto,
     searchWithTag,
     aStarRoute
