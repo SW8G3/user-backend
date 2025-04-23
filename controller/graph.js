@@ -185,4 +185,5 @@ module.exports = {
     getNodeFromId,
     getDirectionPhoto,
     searchWithTag,
+    aStarRoute
 };
