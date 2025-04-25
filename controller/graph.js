@@ -169,10 +169,7 @@ const getDirectionPhoto = async (req, res) => {
             return;
         }
 
-        // Get fromAImgUrl from edge if node.id is fromA or get fromBImgUrl if node.id is fromB
-        const fromAImgUrl = edge.fromAImgUrl;
-        const fromBImgUrl = edge.fromBImgUrl;
-        const imgUrl = edge.nodeA === src ? fromAImgUrl : fromBImgUrl;
+        const imgUrl = `https://raw.githubusercontent.com/SW8G3/images/refs/heads/main/${edge.nodeA}-${edge.nodeB}.jpg`;
         res.json({ imgUrl });
     } catch (error) {
         res.status(500).json({ error: error });
