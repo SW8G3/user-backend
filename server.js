@@ -36,7 +36,7 @@ const corsOptions = {
 */
 
 const corsOptions = {
-  origin: 'https://10.92.0.113:5173',  // your frontend's full HTTPS origin (no trailing slash)
+  origin: ['https://10.92.0.113:5173', 'https://localhost:5173'],  // your frontend's full HTTPS origin (no trailing slash)
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: false,  // only if you're using cookies or sessions
