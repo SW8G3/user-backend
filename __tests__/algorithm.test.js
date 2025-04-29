@@ -1,7 +1,7 @@
-import { aStarRoute } from '../controller/graph';
+const { aStarRoute } = require('../controller/graph');
 
 describe('A* Algorithm', () => {
-  const heuristic = (nodeA: any, nodeB: any) => {
+  const heuristic = (nodeA, nodeB) => {
     const dx = (nodeA.position?.[0] || 0) - (nodeB.position?.[0] || 0);
     const dy = (nodeA.position?.[1] || 0) - (nodeB.position?.[1] || 0);
     return Math.sqrt(dx * dx + dy * dy);
@@ -51,7 +51,7 @@ describe('A* Algorithm', () => {
   });
 
   it('should handle an empty graph', () => {
-    const edges: any[] = []; // No edges
+    const edges = []; // No edges
 
     const start = { id: 1, position: [0, 0] };
     const goal = { id: 2, position: [1, 0] };
