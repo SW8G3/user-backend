@@ -7,10 +7,21 @@ const searchWithTag = async (req, res) => {
         const nodes = await prisma.node.findMany(); // Fetch all nodes
         const searchTag = req.body.searchTag.toLowerCase();
 
-        // Filter nodes where any tag in searchTags partially matches the searchTag
-        const filteredNodes = nodes.filter(node =>
-            node.searchTags.some(tag => tag.toLowerCase().includes(searchTag))
-        );
+        // Filter nodes and map to include only the matching tag
+        const filteredNodes = nodes
+            .map(node => {
+                const matchingTag = node.searchTags.find(tag =>
+                    tag.toLowerCase().includes(searchTag)
+                );
+                if (matchingTag) {
+                    return {
+                        ...node,
+                        searchTags: [matchingTag], // Only include the matching tag
+                    };
+                }
+                return null;
+            })
+            .filter(node => node !== null);
 
         res.json({ nodes: filteredNodes });
     } catch (error) {
