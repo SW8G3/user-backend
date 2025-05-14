@@ -188,7 +188,7 @@ const getDirectionPhoto = async (req, res) => {
             nodeB = edge.nodeA;
         }
 
-        const imgUrl = `https://raw.githubusercontent.com/SW8G3/images/refs/heads/main/${nodeA}-${nodeB}.jpg`;
+        const imgUrl = `https://raw.githubusercontent.com/SW8G3/images/refs/heads/main/${nodeA}-${nodeB}.JPG`;
         res.json({ imgUrl });
     } catch (error) {
         res.status(500).json({ error: error });
