@@ -150,7 +150,7 @@ const getRoute = async (req, res) => {
         const edges = await prisma.edge.findMany({
             where: {
                 isObstructed: false,
-                //clearance: 0,
+                clearance: 0,
             },
         });
 
