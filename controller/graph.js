@@ -188,7 +188,18 @@ const getDirectionPhoto = async (req, res) => {
             nodeB = edge.nodeA;
         }
 
-        const imgUrl = `https://raw.githubusercontent.com/SW8G3/images/refs/heads/main/${nodeA}-${nodeB}.JPG`;
+        let imgUrl = `https://raw.githubusercontent.com/SW8G3/images/refs/heads/main/${nodeA}-${nodeB}.JPG`;
+        let response = await fetch(imgUrl);
+
+        if (!response.ok) {
+            // Try with lowercase jpg
+            imgUrl = `https://raw.githubusercontent.com/SW8G3/images/refs/heads/main/${nodeA}-${nodeB}.jpg`;
+            response = await fetch(imgUrl);
+            if (!response.ok) {
+                res.status(404).json({ error: "Image not found" });
+                return;
+            }
+        }
         res.json({ imgUrl });
     } catch (error) {
         res.status(500).json({ error: error });
