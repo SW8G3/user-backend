@@ -160,16 +160,24 @@ const getDirectionPhoto = async (req, res) => {
             where: {
                 OR: [
                     { nodeA: src, nodeB: dst },
-                    { nodeA: dst, nodeB: src },
-                ],
-            },
+                    { nodeA: dst, nodeB: src }
+                ]
+            }
         });
         if (!edge) {
             res.status(404).json({ error: "Edge not found" });
             return;
         }
 
-        const imgUrl = `https://raw.githubusercontent.com/SW8G3/images/refs/heads/main/${edge.nodeA}-${edge.nodeB}.jpg`;
+        // Switch nodeA and nodeB if nodeA matches dst and nodeB matches src
+        let nodeA = edge.nodeA;
+        let nodeB = edge.nodeB;
+        if (edge.nodeA === dst && edge.nodeB === src) {
+            nodeA = edge.nodeB;
+            nodeB = edge.nodeA;
+        }
+
+        const imgUrl = `https://raw.githubusercontent.com/SW8G3/images/refs/heads/main/${nodeA}-${nodeB}.jpg`;
         res.json({ imgUrl });
     } catch (error) {
         res.status(500).json({ error: error });
