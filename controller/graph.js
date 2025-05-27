@@ -7,10 +7,21 @@ const searchWithTag = async (req, res) => {
         const nodes = await prisma.node.findMany(); // Fetch all nodes
         const searchTag = req.body.searchTag.toLowerCase();
 
-        // Filter nodes where any tag in searchTags partially matches the searchTag
-        const filteredNodes = nodes.filter(node =>
-            node.searchTags.some(tag => tag.toLowerCase().includes(searchTag))
-        );
+        // Filter nodes and map to include only the matching tag
+        const filteredNodes = nodes
+            .map(node => {
+                const matchingTag = node.searchTags.find(tag =>
+                    tag.toLowerCase().includes(searchTag)
+                );
+                if (matchingTag) {
+                    return {
+                        ...node,
+                        searchTags: [matchingTag], // Only include the matching tag
+                    };
+                }
+                return null;
+            })
+            .filter(node => node !== null);
 
         res.json({ nodes: filteredNodes });
     } catch (error) {
@@ -19,6 +30,26 @@ const searchWithTag = async (req, res) => {
     }
 };
 
+const getNodeFromId = async (req, res) => {
+    try {
+        const nodeId = req.body.nodeId; // Assuming the ID is passed in the request body
+        const node = await prisma.node.findUnique({
+            where: {
+                id: nodeId,
+            },
+        });
+
+        if (!node) {
+            res.status(404).json({ error: "Node not found" });
+            return;
+        }
+
+        res.json({ node });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+        console.error(error);
+    }
+};
 
 /**
  * A* algorithm to find the shortest path between two nodes.
@@ -119,7 +150,7 @@ const getRoute = async (req, res) => {
         const edges = await prisma.edge.findMany({
             where: {
                 isObstructed: false,
-                //clearance: 0,
+                clearance: 0,
             },
         });
 
@@ -140,19 +171,35 @@ const getDirectionPhoto = async (req, res) => {
             where: {
                 OR: [
                     { nodeA: src, nodeB: dst },
-                    { nodeA: dst, nodeB: src },
-                ],
-            },
+                    { nodeA: dst, nodeB: src }
+                ]
+            }
         });
         if (!edge) {
             res.status(404).json({ error: "Edge not found" });
             return;
         }
 
-        // Get fromAImgUrl from edge if node.id is fromA or get fromBImgUrl if node.id is fromB
-        const fromAImgUrl = edge.fromAImgUrl;
-        const fromBImgUrl = edge.fromBImgUrl;
-        const imgUrl = edge.nodeA === src ? fromAImgUrl : fromBImgUrl;
+        // Switch nodeA and nodeB if nodeA matches dst and nodeB matches src
+        let nodeA = edge.nodeA;
+        let nodeB = edge.nodeB;
+        if (edge.nodeA === dst && edge.nodeB === src) {
+            nodeA = edge.nodeB;
+            nodeB = edge.nodeA;
+        }
+
+        let imgUrl = `https://raw.githubusercontent.com/SW8G3/images/refs/heads/main/${nodeA}-${nodeB}.JPG`;
+        let response = await fetch(imgUrl);
+
+        if (!response.ok) {
+            // Try with lowercase jpg
+            imgUrl = `https://raw.githubusercontent.com/SW8G3/images/refs/heads/main/${nodeA}-${nodeB}.jpg`;
+            response = await fetch(imgUrl);
+            if (!response.ok) {
+                res.status(404).json({ error: "Image not found" });
+                return;
+            }
+        }
         res.json({ imgUrl });
     } catch (error) {
         res.status(500).json({ error: error });
@@ -162,6 +209,8 @@ const getDirectionPhoto = async (req, res) => {
 
 module.exports = {
     getRoute,
+    getNodeFromId,
     getDirectionPhoto,
     searchWithTag,
+    aStarRoute
 };
