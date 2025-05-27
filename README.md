@@ -1,76 +1,29 @@
-# Backend-user
+# User Backend
 
-Backend user
+# Requirements
+- NodeJS
 
----
+# Environment file
+1. Create a `.env` file in the root directory.
+2. Add the following values to the file:
 
-## 🔒 Local HTTPS Setup (Frontend + Backend)
-
-To run the project securely over HTTPS (required for camera access, WebSocket, etc.), follow these steps to generate a trusted SSL certificate using [`mkcert`](https://github.com/FiloSottile/mkcert).
-
-> ⚠️ **Do not commit the generated `.pem` files to Git** — they are local development certificates and should remain private.
-
----
-
-### ✅ Step 1: Install `mkcert`
-
-#### On macOS:
-```bash
-brew install mkcert
-mkcert -install
+```
+DATABASE_USER = 'mapTool'
+DATABASE_PASSWORD = '1234'
+DATABASE_IP = 'localhost'
+DATABASE_PORT = '5432'
+DATABASE_NAME = 'postgres'
+DATABASE_URL = "postgresql://postgres:password@localhost:5432/wayfinder"
 ```
 
-#### On Windows:
-1. Download and install from: [mkcert GitHub Installation Guide](https://github.com/FiloSottile/mkcert#installation)
-2. Then run:
-   ```bash
-   mkcert -install
-   ```
+# Generate Certificates
+1. Install `openssl` binaries: https://slproweb.com/products/Win32OpenSSL.html
+2. Create an `ssl` directory in the root directory.
+3. `cd` into `ssl` and run `openssl req -x509 -newkey rsa:2048 -nodes -keyout ssl/key.pem -out ssl/cert.pem -days 365`
+4. Copy `ssl` directory into the `mobile-frontend` root directory.
 
-#### On Linux:
-Follow the Linux instructions on the [mkcert GitHub repo](https://github.com/FiloSottile/mkcert).
-
----
-
-### ✅ Step 2: Generate HTTPS Certificates
-
-Run the following command inside the project root folder:
-
-```bash
-mkcert localhost 127.0.0.1 ::1
-```
-
-This will generate two files:
-- `localhost+2.pem` → the SSL certificate
-- `localhost+2-key.pem` → the private key
-
-These files will be used automatically by the backend and frontend servers.
-
----
-
-### ✅ Step 3: Run the Project
-
-No further configuration is needed. Start your development servers as usual:
-
-```bash
-npm run dev
-```
-
-> Replace `npm run dev` with your specific command if different.
-
-The app should now be accessible at the following URLs:
-- **Frontend (Vite):** [https://localhost:5173](https://localhost:5173)
-- **Backend (Express):** [https://localhost:3002](https://localhost:3002)
-
-> 🛑 **Note:** You may need to visit these URLs manually once and accept the certificate warning in your browser.
-
----
-
-### 🔐 Git Ignore Recommendation
-
-Ensure your `.gitignore` file includes the following entries to prevent certificates from being committed:
-
-```gitignore
-localhost+2*.pem
-*.pem
-```
+# Setup
+1. `npm i`
+2. `npm run docker:up`
+3. `npm run prisma:generate`
+5. `npm run dev`
